@@ -1,5 +1,5 @@
 const assert = require('assert')
-const uni = require('uni')
+import * as uni from '../index'
 
 describe('test/index.test.ts', () => {
   it('should expose properties', () => {
