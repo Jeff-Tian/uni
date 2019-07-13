@@ -1,0 +1,33 @@
+@startuml
+title uni-logger
+
+package Logger <<Node>> {
+  package Uni <<Node>> {
+    class RequestLogger
+    class CommonLogger
+  }
+
+  class Logger {
+    +Array transports
+  }
+
+  UniLogger <|-- RequestLogger: Inheritance
+  UniLogger <|-- CommonLogger: Inheritance
+  Logger <|-- UniLogger: Inheritance
+  Logger <|-- ConsoleLogger: Inheritance
+}
+
+
+package Transport <<Node>> {
+  class Transport
+  class FileTransport
+  class ConsoleTransport
+
+  Transport <|-up- FileTransport: Inheritance
+  Transport <|-up- ConsoleTransport: Inheritance
+}
+
+ConsoleTransport <|-- ConsoleLogger: use
+ConsoleTransport <|-- UniLogger: use
+FileTransport <|-- UniLogger: use
+@enduml
