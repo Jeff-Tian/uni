@@ -1,14 +1,14 @@
 {
     "name": "uni",
     "version": "0.0.1",
-    "description": "TypeScript 版 gRPC 开发框架。gRPC framework in TypeScript version.",
+    "description": "TypeScript 版**云原生互联网应用开发框架**。gRPC framework in TypeScript version.",
     "main": "lib/index.js",
     "directories": {
         "lib": "lib",
         "test": "src/test"
     },
     "scripts": {
-        "test": "cross-env TS_NODE_TRANSPILE_ONLY=1 mocha --require espower-typescript/guess --timeout 3000 --exit 'src/test/*.test.ts'",
+        "test": "cross-env TS_NODE_TRANSPILE_ONLY=1 mocha --require espower-typescript/guess --timeout 3000 --exit 'src/test/**/*.test.ts'",
         "test:coverage": "TS_NODE_COMPILER_OPTIONS='{\"target\":\"es6\"}' nyc npm test",
         "build": "tsc -p tsconfig.json",
         "prepare": "npm run build"
@@ -20,8 +20,11 @@
     "author": "jeff.tian@outlook.com",
     "license": "MIT",
     "dependencies": {
+        "@grpc/proto-loader": "^0.5.1",
         "@types/node": "^11.9.4",
         "axios": "latest",
+        "google-protobuf": "^3.9.0",
+        "grpc": "^1.22.2",
         "uuid": "^3.3.2"
     },
     "devDependencies": {
@@ -30,6 +33,7 @@
         "coveralls": "^3.0.3",
         "cross-env": "^5.2.0",
         "espower-typescript": "^9.0.1",
+        "grpc-man": "^1.3.2",
         "mocha": "^5.2.0",
         "mocha-lcov-reporter": "^1.3.0",
         "nyc": "^13.3.0",
