@@ -12,6 +12,24 @@
 npm i @jeff-tian/uni
 ```
 
+## 贡献
+
+本库欢迎你的贡献，所有贡献者将会被列在这里。
+
+```shell
+# Fork git@github.com:Jeff-Tian/uni.git 到 yourname/uni
+git clone git@github.com:<yourname>/uni.git
+cd uni
+npm i
+
+git checkout -b feature/fix
+npm test
+git commit -am "your message"
+git push
+```
+
+然后发送 PR 到这里。
+
 ## 日志
 
 ![diagram](./src/uni-logger/diagram.svg)
