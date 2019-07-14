@@ -5,8 +5,8 @@ import Response from './response'
 import path from 'path'
 import grpc, { GrpcObject } from 'grpc'
 import * as protoLoader from '@grpc/proto-loader'
+import Greeter from '../controller/helloworld/greeter'
 
-console.log('proto = ', protoLoader)
 export default class Application extends events.EventEmitter {
   middleware: Array<any>
   env: string
@@ -36,8 +36,7 @@ export default class Application extends events.EventEmitter {
     const helloProto: any = grpc.loadPackageDefinition(packageDef).helloworld
     server.addService(helloProto.Greeter.service, {
       sayHello: (call, callback) => {
-        console.log('calling from xxx', call.request.name)
-        callback(null, { message: 'hello ' + call.request.name })
+        callback(null, Greeter.SayHello({ name: call.request.name }))
       },
     })
     server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
