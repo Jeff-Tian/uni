@@ -27,6 +27,15 @@ export default class Application extends events.EventEmitter {
   listen(...args) {
     const server = new grpc.Server()
     const currentProto = path.resolve(__dirname, '../proto/helloworld.proto')
+
+    this.buildService(server, currentProto)
+
+    server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
+
+    server.start()
+  }
+
+  private buildService(server: grpc.Server, currentProto: string) {
     const packageDef = protoLoader.loadSync(currentProto, {
       keepCase: true,
       longs: String,
@@ -34,24 +43,34 @@ export default class Application extends events.EventEmitter {
       defaults: true,
       oneofs: true,
     })
-    const helloProto: any = grpc.loadPackageDefinition(packageDef).helloworld
 
-    const service: { [key: string]: any } = {}
-    for (const method in helloProto.Greeter.service) {
-      console.log('adding ', method)
+    const packages = grpc.loadPackageDefinition(packageDef)
+    for (const packageName in packages) {
+      const protoPackage: any = packages[packageName]
 
-      if (!Greeter[method]) {
-        throw new Error(`${currentProto} 中定义的 ${method} 没有对应的实现！`)
-      }
+      const service: { [key: string]: any } = {}
 
-      service[method] = (call, callback) => {
-        callback(null, Greeter[method](call.request))
+      for (const rpcService in protoPackage) {
+        if (typeof protoPackage[rpcService] !== 'function') {
+          continue
+        }
+
+        for (const method in protoPackage[rpcService].service) {
+          const rpcPath = protoPackage[rpcService].service[method].path
+
+          const controllerFolder = path.resolve(__dirname, '..', 'controller', packageName)
+          const serviceImplementation = require(path.resolve(controllerFolder, rpcService)).default
+
+          if (!serviceImplementation[method]) {
+            throw new Error(`${currentProto} 中定义的 ${rpcPath} 没有对应的实现！`)
+          }
+          service[method] = (call, callback) => {
+            callback(null, serviceImplementation[method](call.request))
+          }
+        }
+
+        server.addService(protoPackage[rpcService].service, service)
       }
     }
-
-    server.addService(helloProto.Greeter.service, service)
-    server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
-
-    server.start()
   }
 }

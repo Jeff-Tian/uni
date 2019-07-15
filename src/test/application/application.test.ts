@@ -14,5 +14,8 @@ describe('app', () => {
 
     const res2 = await client.grpc.helloworld.Greeter.sayHelloAgain({ name: 'test' })
     assert.deepEqual(res2, { message: 'hello test' })
+
+    const res3 = await client.grpc.helloworld.Greeter.sayHello2({ name: '2' })
+    assert.deepEqual(res3, { message: 'hello 2' })
   })
 })

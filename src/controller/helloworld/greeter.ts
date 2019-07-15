@@ -7,4 +7,8 @@ export default class Greeter {
     console.log('calling by ', name)
     return { message: 'hello ' + name }
   }
+
+  static SayHello2({ name }: { name: string }): { message: string } {
+    return { message: 'hello ' + name }
+  }
 }
