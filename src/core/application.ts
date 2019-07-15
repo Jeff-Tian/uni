@@ -34,11 +34,15 @@ export default class Application extends events.EventEmitter {
       oneofs: true,
     })
     const helloProto: any = grpc.loadPackageDefinition(packageDef).helloworld
-    server.addService(helloProto.Greeter.service, {
-      sayHello: (call, callback) => {
-        callback(null, Greeter.SayHello({ name: call.request.name }))
-      },
-    })
+
+    for (const method in helloProto.Greeter.service) {
+      server.addService(helloProto.Greeter.service, {
+        [method]: (call, callback) => {
+          callback(null, Greeter[method](call.request))
+        },
+      })
+    }
+
     server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
 
     server.start()
