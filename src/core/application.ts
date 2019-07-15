@@ -7,6 +7,11 @@ import grpc, { GrpcObject } from 'grpc'
 import * as protoLoader from '@grpc/proto-loader'
 import fs from 'fs'
 
+const config = {
+  host: '0.0.0.0',
+  port: '50051',
+}
+
 export default class Application extends events.EventEmitter {
   middleware: Array<any>
   env: string
@@ -28,7 +33,7 @@ export default class Application extends events.EventEmitter {
     const server = new grpc.Server()
     this.buildServices(server)
 
-    server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
+    server.bind(`${args[0] || config.host}:${args[1] || config.port}`, grpc.ServerCredentials.createInsecure())
 
     server.start()
   }
@@ -82,7 +87,5 @@ export default class Application extends events.EventEmitter {
         server.addService(protoPackage[rpcService].service, service)
       }
     }
-
-    console.log('server = ', server)
   }
 }
