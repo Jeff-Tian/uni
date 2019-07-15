@@ -74,7 +74,7 @@ export default class Application extends events.EventEmitter {
           const rpcPath = protoPackage[rpcService].service[method].path
 
           const controllerFolder = path.resolve(__dirname, '..', 'controller', packageName)
-          const serviceImplementation = require(path.resolve(controllerFolder, rpcService)).default
+          const serviceImplementation = require(path.resolve(controllerFolder, rpcService.toLowerCase())).default
 
           if (!serviceImplementation[method]) {
             throw new Error(`${currentProto} 中定义的 ${rpcPath} 没有对应的实现！`)
