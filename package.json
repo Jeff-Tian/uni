@@ -1,6 +1,6 @@
 {
     "name": "@jeff-tian/uni",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "TypeScript 版**云原生互联网应用开发框架**。gRPC framework in TypeScript version.",
     "main": "lib/index.js",
     "directories": {
