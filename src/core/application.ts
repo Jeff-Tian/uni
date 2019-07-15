@@ -5,7 +5,7 @@ import Response from './response'
 import path from 'path'
 import grpc, { GrpcObject } from 'grpc'
 import * as protoLoader from '@grpc/proto-loader'
-import Greeter from '../controller/helloworld/greeter'
+import fs from 'fs'
 
 export default class Application extends events.EventEmitter {
   middleware: Array<any>
@@ -26,13 +26,23 @@ export default class Application extends events.EventEmitter {
 
   listen(...args) {
     const server = new grpc.Server()
-    const currentProto = path.resolve(__dirname, '../proto/helloworld.proto')
-
-    this.buildService(server, currentProto)
+    this.buildServices(server)
 
     server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
 
     server.start()
+  }
+
+  private buildServices(server: grpc.Server) {
+    const protoFolder = path.resolve(__dirname, '../proto/')
+
+    const protoFiles = fs.readdirSync(protoFolder)
+
+    protoFiles.map(file => {
+      const currentProto = path.resolve(protoFolder, file)
+      console.log('current = ', currentProto)
+      this.buildService(server, currentProto)
+    })
   }
 
   private buildService(server: grpc.Server, currentProto: string) {
@@ -72,5 +82,7 @@ export default class Application extends events.EventEmitter {
         server.addService(protoPackage[rpcService].service, service)
       }
     }
+
+    console.log('server = ', server)
   }
 }
