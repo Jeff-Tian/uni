@@ -13,7 +13,7 @@ const config = {
 }
 
 export default class Application extends events.EventEmitter {
-  middleware: Array<any>
+  middleware: any[]
   env: string
   context: Context
   request: Request

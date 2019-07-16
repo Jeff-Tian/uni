@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "inlineSourceMap": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "pretty": true
   },
   "include": ["src", "typings"],
   "exclude": ["node_modules", "src/test/*"]
